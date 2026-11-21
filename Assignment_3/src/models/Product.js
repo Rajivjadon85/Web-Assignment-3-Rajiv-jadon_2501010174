@@ -1,15 +1,13 @@
 const mongoose = require('mongoose');
 
-// Product Schema for Inventory System
-// Rajiv Jadon (2501010174)
 const productSchema = new mongoose.Schema(
   {
     name: {
       type: String,
       required: [true, 'Product name is required'],
       trim: true,
-      minlength: [2, 'Product name must have at least 2 characters'],
-      maxlength: [100, 'Product name cannot exceed 100 characters'],
+      minlength: [2, 'Name must be at least 2 characters'],
+      maxlength: [100, 'Name cannot exceed 100 characters'],
     },
     sku: {
       type: String,
@@ -17,7 +15,7 @@ const productSchema = new mongoose.Schema(
       unique: true,
       uppercase: true,
       trim: true,
-      match: [/^[A-Z0-9-]+$/, 'SKU can only contain uppercase letters, numbers, and hyphens'],
+      match: [/^[A-Z0-9-]+$/, 'SKU must contain only uppercase letters, numbers, and hyphens'],
     },
     category: {
       type: String,
@@ -27,7 +25,7 @@ const productSchema = new mongoose.Schema(
     price: {
       type: Number,
       required: [true, 'Price is required'],
-      min: [0, 'Price must be greater than or equal to 0'],
+      min: [0, 'Price cannot be negative'],
     },
     quantity: {
       type: Number,
@@ -60,14 +58,11 @@ const productSchema = new mongoose.Schema(
   }
 );
 
-// Virtual property: Total monetary value of current in-stock units
+// Virtual for calculating total stock value (price * quantity)
 productSchema.virtual('stockValue').get(function () {
-  return (this.price || 0) * (this.quantity || 0);
+  return this.price * this.quantity;
 });
 
-// Index to optimize category-based searches and aggregations
 productSchema.index({ category: 1 });
 
-const Product = mongoose.model('Product', productSchema);
-
-module.exports = Product;
+module.exports = mongoose.model('Product', productSchema);

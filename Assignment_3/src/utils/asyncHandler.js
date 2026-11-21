@@ -1,4 +1,4 @@
-// Async handler to catch errors and forward them to error-handling middleware
+// Catch async route errors and pass to next()
 const asyncHandler = (fn) => (req, res, next) => {
   Promise.resolve(fn(req, res, next)).catch(next);
 };
