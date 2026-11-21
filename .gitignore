@@ -6,6 +6,10 @@ node_modules/
 .env
 **/.env
 
+# Package lock (to keep GitHub repository clean like friend's screenshot)
+package-lock.json
+**/package-lock.json
+
 # Logs
 npm-debug.log*
 yarn-debug.log*
